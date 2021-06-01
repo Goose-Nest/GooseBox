@@ -3,7 +3,6 @@ const permList = require('./perms/index.js');
 
 const { log, multi } = require('./log.js');
 
-
 if (typeof window === 'undefined') { // Running in Node.js testing
   multi('node detected:', 'filling global scope with fillers', 'cloning global scope as window');
 
@@ -43,4 +42,11 @@ console.log('Node', Node, window.Node, globalThis.Node);
 // localstorage - localStorage
 console.log('localStorage', localStorage, window.localStorage, globalThis.localStorage);
 
-'foobar'`, [ ], false));
+const frame = document.createElement('frame');
+frame.src = 'about:blank';
+
+document.body.appendChild(frame);
+
+console.log('bypass check', frame.contentWindow.localStorage, frame.contentWindow.fetch);
+
+'foobar'`, [ 'dom' ]));
