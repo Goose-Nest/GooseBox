@@ -1,5 +1,5 @@
 const evalWrap = require('./evalWrap.js');
-const permList = require('./perms.js');
+const permList = require('./perms/index.js');
 
 /* restrictiveByDefault explaination:
 If true: Null all props in perms which have not been specified (exclusive)
