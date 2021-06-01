@@ -7,5 +7,10 @@ module.exports = [
   {
     name: 'dom',
     props: ['document']
+  },
+
+  {
+    name: 'localstorage',
+    props: ['localStorage']
   }
 ];
