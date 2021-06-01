@@ -20,4 +20,15 @@ The core of the permission structure is a restrictive by default policy (which c
 
 ### Permission Object
 
-The permission object is quite simple: having a name and then props. The name is what should be given to the sandbox so it can find the correct permission object. The props is what properties to remove from the global scope if it shouldn't be allowed.
+The permission object is quite simple: having a name and then props. The name is what should be given to the sandbox so it can find the correct permission object. The props is what properties to remove from the global scope if it shouldn't be allowed. Example object:
+
+```js
+{
+  name: 'network',
+  props: ['fetch', 'XMLHttpRequest']
+}
+```
+
+## What GooseBox Doesn't Do
+
+- Stealth / not letting evaluated JS realise it's inside of the box
