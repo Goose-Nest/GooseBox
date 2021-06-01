@@ -1,9 +1,12 @@
 const { log } = require('../log.js');
 
 module.exports = (originalFunc, stop) => (function (...elements) {
+  const ret = originalFunc.apply(this, elements);
+
   console.log(this, elements);
 
-  originalFunc.apply(this, elements);
+  // Check running in GooseBox
+  if (!this.ownerDocument.defaultView.GooseBox) return ret;
 
   for (const el of elements) {
     if (!el.contentWindow) return;
@@ -23,4 +26,6 @@ module.exports = (originalFunc, stop) => (function (...elements) {
       log(`not trying ee_replaceFunc (could not find Node.protoptype.appendChild)`);
     }
   }
+
+  return ret;
 });

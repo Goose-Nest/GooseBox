@@ -31,6 +31,8 @@ const box = (jsCode, perms = [], restrictiveByDefault = true) => {
 };
 
 console.log(box(`
+console.log('GooseBox', GooseBox, window.GooseBox, globalThis.GooseBox);
+
 // Network - fetch
 console.log('fetch', fetch, window.fetch, globalThis.fetch);
 console.log('XMLHttpRequest', XMLHttpRequest, window.XMLHttpRequest, globalThis.XMLHttpRequest);
@@ -47,6 +49,8 @@ frame.src = 'about:blank';
 
 document.body.appendChild(frame);
 
-console.log('bypass check', frame.contentWindow.localStorage, frame.contentWindow.fetch);
+console.log('bypass check 1', frame.ownerDocument.defaultView.localStorage, frame.ownerDocument.defaultView.fetch);
+
+console.log('bypass check 2', frame.contentWindow.localStorage, frame.contentWindow.fetch);
 
 'foobar'`, [ 'dom' ]));
