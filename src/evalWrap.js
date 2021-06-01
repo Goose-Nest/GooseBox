@@ -17,6 +17,9 @@ module.exports = (jsCode, stop) => {
   context.window = context;
   context.globalThis = context;
 
+  context.Node.prototype.appendChild = require('./solves/embedElements.js')(context.Node.prototype.appendChild);
+  context.Node.prototype.append = require('./solves/embedElements.js')(context.Node.prototype.append);
+
   console.log(context);
 
   with (context) {
