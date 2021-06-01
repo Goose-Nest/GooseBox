@@ -1,15 +1,28 @@
 const evalWrap = require('./evalWrap.js');
 const permList = require('./perms/index.js');
 
+const { log, multi } = require('./log.js');
+
+
+if (typeof window === 'undefined') { // Running in Node.js testing
+  multi('node detected:', 'filling global scope with fillers', 'cloning global scope as window');
+
+  for (const p of permList.reduce((a, v) => a.concat(v.props), [])) {
+    global[p] = 'filler';
+  }
+
+  global.window = global;
+}
+
 /* restrictiveByDefault explaination:
 If true: Null all props in perms which have not been specified (exclusive)
 If false: Null all props in perms which have been specified (inclusive)
 */
 
 const box = (jsCode, perms = [], restrictiveByDefault = true) => {
-  const toNull = permList.filter((x) => restrictiveByDefault ? !perms.includes(x.name) : perms.includes(x.name)).reduce((a, v) => a.concat(v.props), []);
+  multi('boxing code:', `with perms: ${JSON.stringify(perms).replace(',', ', ')}`, `restrictiveByDefault: ${restrictiveByDefault}`);
 
-  console.log(toNull);
+  const toNull = permList.filter((x) => restrictiveByDefault ? !perms.includes(x.name) : perms.includes(x.name)).reduce((a, v) => a.concat(v.props), []);
 
   evalWrap(jsCode, toNull);
 };
