@@ -6,7 +6,7 @@ module.exports = [
 
   {
     name: 'dom',
-    props: ['document']
+    props: ['document', 'Node']
   },
 
   {
