@@ -16,4 +16,7 @@ const box = (jsCode, perms = [], restrictiveByDefault = true) => {
 
 console.log(box(`
 console.log(fetch, window.fetch, globalThis.fetch);
-console.log(console); 'foobar'`, [ 'network' ]));
+
+console.log(console, Node);
+
+'foobar'`, [ ]));
