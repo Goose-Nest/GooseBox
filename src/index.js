@@ -20,9 +20,13 @@ If false: Null all props in perms which have been specified (inclusive)
 */
 
 const box = (jsCode, perms = [], restrictiveByDefault = true) => {
-  multi('boxing code:', `with perms: ${JSON.stringify(perms).replace(',', ', ')}`, `restrictiveByDefault: ${restrictiveByDefault}`);
-
   const toNull = permList.filter((x) => restrictiveByDefault ? !perms.includes(x.name) : perms.includes(x.name)).reduce((a, v) => a.concat(v.props), []);
+
+  multi('boxing code:',
+    `with perms: ${JSON.stringify(perms).replace(/,/g, ', ')}`,
+    `restrictiveByDefault: ${restrictiveByDefault}`,
+    ``,
+    `global kill props: ${JSON.stringify(toNull).replace(/,/g, ', ')}`);
 
   evalWrap(jsCode, toNull);
 };
@@ -39,4 +43,4 @@ console.log('Node', Node, window.Node, globalThis.Node);
 // localstorage - localStorage
 console.log('localStorage', localStorage, window.localStorage, globalThis.localStorage);
 
-'foobar'`, [ ]));
+'foobar'`, [ ], false));
