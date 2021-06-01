@@ -5,14 +5,11 @@ module.exports = (jsCode, stop) => {
     window = global;
   }
 
-  let nullObj = stop.reduce((a, v) => { a[v] = null; return a; }, {});
+  let context = {};
 
-  console.log(nullObj);
-
-  let context = {
-    ...window,
-    ...nullObj
-  };
+  for (const k of Reflect.ownKeys(window)) {
+    context[k] = stop.includes(k) ? null : window[k];
+  }
 
   context.window = context;
   context.globalThis = context;
