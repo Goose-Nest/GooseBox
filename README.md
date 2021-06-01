@@ -1,5 +1,8 @@
 # GooseBox (GEx2)
 
+### GooseBox has been deprecated
+
+
 **Experimental** JS sandbox for browser.
 
 
