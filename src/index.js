@@ -15,8 +15,15 @@ const box = (jsCode, perms = [], restrictiveByDefault = true) => {
 };
 
 console.log(box(`
-console.log(fetch, window.fetch, globalThis.fetch);
+// Network - fetch
+console.log('fetch', fetch, window.fetch, globalThis.fetch);
+console.log('XMLHttpRequest', XMLHttpRequest, window.XMLHttpRequest, globalThis.XMLHttpRequest);
 
-console.log(console, Node);
+// DOM - document
+console.log('document', document, window.document, globalThis.document);
+console.log('Node', Node, window.Node, globalThis.Node);
+
+// localstorage - localStorage
+console.log('localStorage', localStorage, window.localStorage, globalThis.localStorage);
 
 'foobar'`, [ ]));
