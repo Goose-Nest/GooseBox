@@ -1,7 +1,7 @@
-export default (jsCode, stop) => {
+export default (jsCode, perms) => {
   const context = {};
   for (const k of Reflect.ownKeys(window)) {
-    context[k] = stop.includes(k) ? null : window[k];
+    context[k] = null;
   }
 
   context.GooseBox = true;
