@@ -1,1 +1,4 @@
-module.exports = require('./web.js').concat(require('./discord.js'));
+export default [
+  ...require('./web.js'),
+  ...require('./discord.js')
+];

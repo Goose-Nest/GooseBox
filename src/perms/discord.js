@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   {
     name: 'sentry',
     props: ['__SENTRY__', 'DiscordSentry']
