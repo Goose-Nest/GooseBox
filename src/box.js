@@ -5,6 +5,10 @@ let allAPIs = [
   'console'
 ];
 
+let dangerousAPIs = [
+  // 'patcher'
+];
+
 
 let box = (jsCode, perms, meta = { name: 'Unknown' }) => {
   const context = {};
@@ -18,7 +22,7 @@ let box = (jsCode, perms, meta = { name: 'Unknown' }) => {
       get: () => {
         const permKey = k.replace(/[a-z][A-Z]/g, (_) => `${_[0]}-${_[1]}`).toLowerCase(); // ConfirmDialog -> confirm-dialog, username -> username
 
-        if (!perms.includes(permKey) && !confirm(`${meta.name} wants your permission to use ${k}`)) { // !goosemod.confirmDialog('Confirm', `${meta.name} Needs Permission`, `${meta.name} wants your permission to access ${k}`)) {
+        if (dangerousAPIs.includes(permKey) && !perms.includes(permKey) && !confirm(`${meta.name} wants your permission to use ${k}`)) { // !goosemod.confirmDialog('Confirm', `${meta.name} Needs Permission`, `${meta.name} wants your permission to access ${k}`)) {
           delete context[k];
           return;
         }
