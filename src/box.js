@@ -1,4 +1,4 @@
-// let patcherCore = ['patch', 'inject', 'uninject'];
+let patcherCore = ['patch', 'inject', 'uninject'];
 
 
 let box = (jsCode, perms) => {
