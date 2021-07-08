@@ -38,7 +38,7 @@ let box = (jsCode, perms) => {
       return ret;
     };
 
-    const wp_req = undefined;
+    let wp_req = undefined;
 
     const wp_init = () => {
       wp_req = window.webpackJsonp.push([[], {__extra_id__: (module, exports, req) => module.exports = req}, [["__extra_id__"]]]);
@@ -126,6 +126,15 @@ let box = (jsCode, perms) => {
   }
 };
 
+let blockAssert = (out, expected = true) => { // expected: if expected to be blcoked
+  if (out !== null && expected) {
+    console.error('[GooseBox Test]', 'Block test failed (was not blocked, expected blocked)', out);
+  } else if (out === null && !expected) {
+    console.error('[GooseBox Test]', 'Block test failed (was blocked, expected not blocked)', out);
+  } else {
+    // console.log('[GooseBox Test] Passed block test');
+  }
+};
 
 // Testing examples
 
@@ -136,7 +145,7 @@ box(`console.log(Webpack, Toast, Patcher)`, ['console', 'webpack', 'toast', 'pat
 // Webpack blocking
 
 // Window (window, global scope) being blocked
-box(`console.log(Webpack.findByProps('console'))`, ['console', 'webpack']);
+blockAssert(box(`Webpack.findByProps('console')`, ['console', 'webpack']));
 
 // Login / token being blocked
-box(`console.log(Webpack.findByProps('loginToken'))`, ['console', 'webpack']);
+box(`Webpack.findByProps('loginToken')`, ['console', 'webpack']);
