@@ -17,7 +17,7 @@ let box = (jsCode, perms, meta = { name: 'Unknown' }) => {
       get: () => {
         const permKey = k.replace(/[a-z][A-Z]/g, (_) => `${_[0]}-${_[1]}`).toLowerCase(); // ConfirmDialog -> confirm-dialog, username -> username
 
-        if (!perms.includes(permKey) && !goosemod.confirmDialog('Confirm', `${meta.name} Needs Permission`, `${meta.name} wants your permission to access ${k}`)) {
+        if (!perms.includes(permKey) && !confirm(`${meta.name} wants your permission to use ${k}`)) { // !goosemod.confirmDialog('Confirm', `${meta.name} Needs Permission`, `${meta.name} wants your permission to access ${k}`)) {
           delete context[k];
           return;
         }
