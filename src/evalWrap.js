@@ -7,8 +7,11 @@ export default (jsCode, perms) => {
     context[k] = null;
   }
 
-  if (perms.includes('webpack')) context.Webpack = goosemod.webpackModules;
   if (perms.includes('patcher')) context.Patcher = patcherCore.reduce((acc, v) => { acc[v] = goosemod.patcher[v]; return acc; }, {});
+  if (perms.includes('webpack')) context.Webpack = goosemod.webpackModules;
+  if (perms.includes('settings')) context.Settings = goosemod.settings;
+  if (perms.includes('toast')) context.Toast = goosemod.showToast;
+  if (perms.includes('confirm-dialog')) context.ConfirmDialog = goosemod.confirmDialog;
 
   for (const key of Object.keys(goosemod.patcher).filter((x) => !patcherCore.includes(x))) {
     const permKey = key.replace(/[a-z][A-Z]/g, (_) => `${_[0]}-${_[1]}`); // contextMenu -> context-menu, username -> username
