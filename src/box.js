@@ -148,4 +148,4 @@ box(`console.log(Webpack, Toast, Patcher)`, ['console', 'webpack', 'toast', 'pat
 blockAssert(box(`Webpack.findByProps('console')`, ['console', 'webpack']));
 
 // Login / token being blocked
-box(`Webpack.findByProps('loginToken')`, ['console', 'webpack']);
+blockAssert(box(`Webpack.findByProps('loginToken')`, ['console', 'webpack']));
