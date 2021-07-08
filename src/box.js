@@ -13,14 +13,16 @@ let box = (jsCode, perms) => {
 
   if (perms.includes('webpack')) {
     const blocklist = [
-      ['token', [
+      ['token', [ // Getting token
         '_dispatchToken', '_orderedCallbackTokens', // Flux
         'DEVICE_TOKEN', 'DEVICE_VOIP_TOKEN', 'IS_SEARCH_FILTER_TOKEN', 'IS_SEARCH_ANSWER_TOKEN', 'SearchTokenTypes', 'TOKEN_REGEX', 'TOKEN_KEY', // Constants
       ]],
-      ['login', [
+
+      ['login', [ // Login
         'LoginStates', 'LoginSuccessfulSources' // Constants
       ]],
-      ['window', [
+
+      ['window', [ // Sandbox escape / privilege escalation
         'WindowsKeyToCode', 'PopoutWindowKeys' // Constants
       ]]
     ];
@@ -145,7 +147,7 @@ box(`console.log(Webpack, Toast, Patcher)`, ['console', 'webpack', 'toast', 'pat
 // Webpack blocking
 
 // Window (window, global scope) being blocked
-blockAssert(box(`Webpack.findByProps('console')`, ['console', 'webpack']));
+blockAssert(box(`Webpack.findByProps('console')`, ['webpack']));
 
 // Login / token being blocked
-blockAssert(box(`Webpack.findByProps('loginToken')`, ['console', 'webpack']));
+blockAssert(box(`Webpack.findByProps('loginToken')`, ['webpack']));
