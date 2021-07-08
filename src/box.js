@@ -55,6 +55,8 @@ let box = (jsCode, perms, meta = { name: 'Unknown' }) => {
         
         
             const returnProxy = (ret) => {
+              if (Reflect.ownKeys(ret).includes('Blob')) return null; // Block window
+
               return new Proxy(ret, {
                 get: (target, prop, reciever) => {
                   if (blocklist.some((block) => prop.toLowerCase().includes(block[0]) && !block[1].includes(prop))) {
@@ -228,13 +230,40 @@ let blockAssert = (out, expected = true) => { // expected: if expected to be blc
 // Testing examples
 
 // Check some GM APIs
-box(`console.log(Webpack, Toast, Patcher)`, ['console', 'webpack', 'toast', 'patcher']);
+// box(`console.log(Webpack, Toast, Patcher)`, ['console', 'webpack', 'toast', 'patcher']);
 
 
 // Webpack blocking
 
 // Window (window, global scope) being blocked
-blockAssert(box(`Webpack.findByProps('console')`, ['webpack']));
+blockAssert(box(`Webpack.findByProps('console')`, ['']));
 
 // Login / token being blocked
-blockAssert(box(`Webpack.findByProps('loginToken')`, ['webpack']));
+blockAssert(box(`Webpack.findByProps('loginToken')`, ['']));
+
+
+// Example plugin
+const plugin_usernameInAuthor = box(`const { React } = Webpack.common;
+const MessageClasses = Webpack.findByProps('compact', 'repliedMessage', 'username'); Webpack.common; Webpack.common;
+
+
+class UsernameInAuthor extends Plugin {
+    onImport() {
+      this.enqueueUnpatch(Username.patch(({ message, author }) =>
+        React.createElement('span', {
+          className: MessageClasses.username,
+          style: {
+            color: author.colorString,
+            filter: 'brightness(0.5)',
+            marginLeft: author.nick === message.author.username ? '' : '5px'
+          }
+        }, author.nick === message.author.username ? '' : \`(\${message.author.username})\`
+        )
+      ));
+    }
+
+    onRemove() {
+    }
+}; new UsernameInAuthor()`, []);
+
+plugin_usernameInAuthor.goosemodHandlers.onImport();
