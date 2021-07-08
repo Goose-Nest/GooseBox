@@ -151,7 +151,9 @@ let box = (jsCode, perms, meta = { name: 'Unknown' }) => {
             return context[k] = goosemod.patcher[k[0].toLowerCase() + k.substring(1)]; // ContextMenu -> contextMenu, username -> Username
           }
         }
-      }
+      },
+
+      configurable: true // Allows delete
     })
   }
 
