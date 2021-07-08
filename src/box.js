@@ -264,6 +264,6 @@ class UsernameInAuthor extends Plugin {
 
     onRemove() {
     }
-}; new UsernameInAuthor()`, []);
+}; new UsernameInAuthor()`, [], { name: 'Username in Author' });
 
 plugin_usernameInAuthor.goosemodHandlers.onImport();
