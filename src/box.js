@@ -27,6 +27,8 @@ let box = (jsCode, perms, meta = { name: 'Unknown' }) => {
           return;
         }
 
+        goosemod.showToast(`${meta.name} accessed ${k} for the first time`, { type: 'debuginfo', subtext: 'GooseBox' });
+
         delete context[k];
         switch (k) {
           case 'Patcher': {
@@ -153,7 +155,7 @@ let box = (jsCode, perms, meta = { name: 'Unknown' }) => {
     })
   }
 
-  context.Plugin = class Plugin {
+  context.Plugin = class Plugin { // Base Plugin class
     constructor() {
       this.patches = [];
       this.commands = [];
