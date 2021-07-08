@@ -5,6 +5,13 @@ let allAPIs = [
   'console'
 ];
 
+/* wpBlockMode:
+  prop: only block bad props
+  module: block entire module if it has any bad props
+*/
+let wpBlockMode = 'prop';
+
+
 let box = (jsCode, perms, meta = { name: 'Unknown' }) => {
   const context = {};
 
@@ -31,7 +38,7 @@ let box = (jsCode, perms, meta = { name: 'Unknown' }) => {
           case 'Webpack': {
             const blocklist = [
               ['token', [ // Getting token
-                '_dispatchToken', '_orderedCallbackTokens', // Flux
+                '_dispatchToken', '_orderedCallbackTokens', '_computeOrderedCallbackTokens', // Flux
                 'DEVICE_TOKEN', 'DEVICE_VOIP_TOKEN', 'IS_SEARCH_FILTER_TOKEN', 'IS_SEARCH_ANSWER_TOKEN', 'SearchTokenTypes', 'TOKEN_REGEX', 'TOKEN_KEY', // Constants
               ]],
         
@@ -46,12 +53,38 @@ let box = (jsCode, perms, meta = { name: 'Unknown' }) => {
         
         
             const returnProxy = (ret) => {
+              const props = Reflect.ownKeys(ret).concat(Reflect.ownKeys(ret.__proto__)).filter((x) => typeof x === 'string');
+              let shouldProxy = false;
+
               for (const block of blocklist) {
-                if (Reflect.ownKeys(ret).concat(Reflect.ownKeys(ret.__proto__)).some((x) => x.toLowerCase().includes(block[0]) && !block[1].includes(x))) {
-                  console.warn('[GooseBox]', 'detected access to dangerous Webpack module - blocked module', ret, block, Object.keys(ret).filter((x) => x.toLowerCase().includes(block[0]) && !block[1].includes(x)));
+                if (props.some((x) => x.toLowerCase().includes(block[0]) && !block[1].includes(x))) {
+                  if (wpBlockMode === 'module') {
+                    console.warn('[GooseBox]', 'detected access to dangerous Webpack module - blocked module', ret, block, props.filter((x) => x.toLowerCase().includes(block[0]) && !block[1].includes(x)));
         
-                  return null;
+                    return null;
+                  }
+
+                  console.warn('[GooseBox]', 'detected access to dangerous Webpack module - proxying', ret, block, props.filter((x) => x.toLowerCase().includes(block[0]) && !block[1].includes(x)));
+
+                  shouldProxy = true;
+
+                  break; // Don't need to repeat
                 }
+              }
+
+              if (shouldProxy) {
+                return new Proxy(ret, {
+                  get: (target, prop, reciever) => {
+                    if (blocklist.some((block) => prop.toLowerCase().includes(block[0]) && !block[1].includes(prop))) {
+                      console.warn('[GooseBox]', 'detected access to dangerous property in dangerous module', prop, target);
+
+                      const origType = typeof target[prop]; // Mimic original value with empty of same type
+                      return new window[origType[0].toUpperCase() + origType.substring(1)]();
+                    }
+
+                    return Reflect.get(target, prop, reciever);
+                  }
+                });
               }
         
               return ret;
