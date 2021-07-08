@@ -47,7 +47,7 @@ let box = (jsCode, perms, meta = { name: 'Unknown' }) => {
         
             const returnProxy = (ret) => {
               for (const block of blocklist) {
-                if (Reflect.ownKeys(ret).some((x) => x.toLowerCase().includes(block[0]) && !block[1].includes(x))) {
+                if (Reflect.ownKeys(ret).concat(Reflect.ownKeys(ret.__proto__)).some((x) => x.toLowerCase().includes(block[0]) && !block[1].includes(x))) {
                   console.warn('[GooseBox]', 'detected access to dangerous Webpack module - blocked module', ret, block, Object.keys(ret).filter((x) => x.toLowerCase().includes(block[0]) && !block[1].includes(x)));
         
                   return null;
