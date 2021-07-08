@@ -46,7 +46,9 @@ let box = (jsCode, perms, meta = { name: 'Unknown' }) => {
         
               ['window', [ // Sandbox escape / privilege escalation
                 'WindowsKeyToCode', 'PopoutWindowKeys' // Constants
-              ]]
+              ]],
+
+              // todo?: user info, message info, etc disallowed by default
             ];
         
         
